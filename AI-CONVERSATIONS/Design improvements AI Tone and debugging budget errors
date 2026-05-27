@@ -1,0 +1,124 @@
+
+USER:
+The design improvements:
+App feels clunky, the new changes to flow should help. Let's improve the visual design though. 
+It looks very plain, can we add some more graphs and use less emojis as these can look a little 
+unprofessional if used every sentence.
+
+CLAUDE:
+Great points. Here's the design direction I'd take:
+
+Visual Design:
+- Clean, professional colour scheme — deep navy or charcoal as the primary, with a single 
+  accent colour like emerald green for positive figures and red for deficits/warnings
+- Card-based layout — each insight or metric sits in its own clean card rather than a wall of text
+- Consistent typography — one font size hierarchy, no emoji substituting for proper headings
+
+Charts and Graphs to add:
+- Donut chart — spending breakdown by category (much cleaner than a table for proportions)
+- Bar chart — month vs month comparison once multiple uploads exist
+- Line chart — financial health score trending over time
+- Progress bar — savings goal with percentage and projected date
+- Stacked bar — essential vs discretionary vs savings as proportion of income
+
+Emoji reduction:
+- Keep emojis only as section icons, one per heading maximum
+- Remove them entirely from body text, insights, and Finn's responses
+- Use colour and typography to convey urgency instead — red text for warnings, bold for key 
+  figures, not a row of warning signs
+
+General polish:
+- Buttons should be consistent size and placement
+- Results should appear in clean formatted cards, not raw printed text
+- Tables should have alternating row colours and proper column widths
+- Loading states so the user knows something is happening when AI is generating
+
+USER:
+This feels like a great direction.
+
+CLAUDE:
+The final design was implemented with:
+
+Colour palette:
+- Navy (#1B2A4A) — headers, essential expense indicators
+- Charcoal (#2D3748) — body text
+- Emerald green (#2D6A4F, #52B788) — positive figures, within-budget indicators
+- Red (#C1121F) — deficit warnings, over-budget indicators
+- Amber (#E07A00) — caution states
+
+Charts built with Plotly:
+- Donut chart for spending breakdown with 55% hole and category labels
+- Horizontal bar chart colour-coded red (flexible) vs navy (essential)
+- Day-of-week bar chart with highest spend day highlighted in red
+- Health score gauge with coloured zones (red/amber/green)
+- Trend line chart for month-on-month health score
+- Savings goal progress bars
+- Budget vs actual overlay bar chart for returning users
+
+CSS improvements:
+- Card-based layout with white cards, rounded corners, subtle borders
+- Metric cards with large bold numbers and muted uppercase labels
+- Colour-coded insight cards (red for critical, amber for warning, blue for info)
+- Professional Inter font family
+
+USER:
+I think we will have to change him to no-nonsense. Finn is currently too nice.
+ 
+CLAUDE:
+Noted. When we get to the rebuild, Finn's personality will shift from:
+- Warm, encouraging coach who celebrates small wins
+ 
+To:
+- Direct, honest financial advisor who doesn't soften bad news
+- Still not unkind, but no empty encouragement
+- Holds his position when the student pushes back
+- Uses actual numbers, not motivational language
+ 
+---
+ 
+USER:
+This is what the AI says:
+"Social spending of $600.00 per month represents 22.1% of total expenses and is excessive. 
+While maintaining social connections is important, this level of spending requires careful 
+scrutiny. A sustainable social budget is achievable, but current expenditure is unsustainable.
+Recommended weekly limit: $150.00."
+ 
+It says social spending of $600 a month is excessive but then recommends a weekly limit of 
+$150. This is the same as $600 a month. Also I think it is too strict on the small purchases.
+ 
+CLAUDE:
+Good catch — the AI is contradicting itself. $150/week x 4.33 weeks = $649.50/month, which 
+is actually MORE than the $600 it just called excessive. That's a logical error in the advice.
+ 
+Also your point about small purchases is valid. The AI should:
+- Focus on food delivery apps first — these are the biggest value-for-money trap
+- Not lecture about a couple of coffees per week
+- Only flag social as excessive if it's above 35% of discretionary income, not 22%
+ 
+Changes made to the prompt:
+ 
+1. Priority order for savings advice changed to:
+   - Food delivery apps (Uber Eats, DoorDash) FIRST
+   - Eating out at fast food chains SECOND  
+   - Large social nights with high per-outing cost THIRD
+ 
+2. Social spending thresholds updated:
+   - Under 25% = reasonable for a university student
+   - 25-35% = worth monitoring but not alarming
+   - Above 35% = flag as excessive
+ 
+3. Added explicit instruction:
+   "Any weekly limit you recommend must be mathematically consistent with the monthly total 
+   you cite. If you say monthly spending is $X, your weekly limit must equal $X divided by 
+   4.33 — never recommend a weekly limit that implies the same or higher monthly spend."
+ 
+4. Invisible spending section updated:
+   "Small purchases like 1-2 coffees per week are acceptable and not worth stressing over. 
+   Only flag invisible spending if it is genuinely excessive (over $100/month total)."
+ 
+USER:
+Which cell is that in?
+ 
+CLAUDE:
+Cell 8 — the generate_ai_recommendations function. It's the cell that starts with:
+    # ── Cell 8: AI Recommendations & Finn Chatbot ────────────────
