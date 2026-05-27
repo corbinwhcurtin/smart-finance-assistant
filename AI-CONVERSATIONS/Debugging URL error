@@ -1,0 +1,39 @@
+USER:
+This is the error I get:
+Connection issue: name 'get_response' is not defined
+You can still work on the data processing foundation without this.
+ 
+CLAUDE:
+What's going wrong: Python doesn't know what get_response is. It's like telling someone "call 
+John" without giving them John's phone number — the name means nothing until you introduce it.
+ 
+The function get_response lives inside a library called hands_on_ai, but your notebook never 
+told Python to go fetch it from there.
+ 
+How to fix it — add this to the top of Cell 1 or in a new cell before Cell 2:
+    from hands_on_ai.chat import get_response
+ 
+This is the "introduction" — it tells Python exactly where to find get_response and loads it 
+into your session.
+ 
+---
+ 
+USER:
+Removing the space fixed it, thank you.
+ 
+Error had been: Connection error trying to reach https://ollama.locollm.org/api/embeddings
+ 
+CLAUDE:
+Glad that did it! A sneaky bug — leading spaces in URLs are invisible but completely break 
+the connection. Good one to remember for the future.
+ 
+The original configuration had:
+    os.environ['HANDS_ON_AI_SERVER'] = ' https://ollama.locollm.org'
+                                        ^ space here was the problem
+ 
+The fix was simply:
+    os.environ['HANDS_ON_AI_SERVER'] = 'https://ollama.locollm.org'
+ 
+This is a common real-world debugging scenario — the error message pointed to a connection 
+problem but the actual cause was invisible whitespace in the URL string. This demonstrates 
+the importance of careful string handling in configuration code.
