@@ -1,0 +1,40 @@
+User:
+I want to have all of those features please. what would my problem statement be — I want to create a python transaction analysis tool for people spending patterns. I want the focus to help uni students budget better, with a focus on minimizing unnecessary spending and sticking to a budget that still allows for saving for e.g. holidays, and always for social spending within reason. It should analyse csv
+Claude:
+Great starting point. "Money that disappears" is actually a really specific and useful framing — it's the classic problem of small, frequent, forgettable transactions that don't feel significant individually but wreck a budget collectively.
+Here are some directions to think about:
+Catching "invisible" spending
+
+Flag transactions under $10–15 that happen more than X times a week — the death-by-a-thousand-cuts category
+Identify subscriptions and recurring charges (same merchant, similar amount, regular interval)
+Spot "lazy spending" — food delivery, convenience stores, vending machines — things bought nearby when cheaper options exist
+Highlight late-night transactions (a proxy for impulse spending)
+
+Making the budget feel real
+
+A "daily allowance" view — takes monthly budget and shows how much you have per day left this week
+A "if you cut X, you could afford Y" insight — e.g. "cutting 3 coffees a week funds a weekend trip in 2 months"
+A savings runway — at current spend rate, how many weeks until savings goal is hit?
+
+Protecting social spending
+
+Let the student define a "social budget" category — nights out, restaurants, events — and treat it as protected, not flagged as waste
+Show social spend as a percentage so it feels justified, not guilty
+Compare social spend to other "optional" categories so they can see the trade-offs themselves
+
+Spending pattern insights
+
+Day-of-week breakdown — do they spend more on Fridays? After payday?
+Merchant frequency map — top 10 places money goes, ranked
+"Bad week" detection — weeks where spend spiked vs their own average
+
+Motivation / goal tracking
+
+Holiday/goal savings tracker — "you're 34% of the way to Bali"
+Streak tracking — "3 weeks under budget on food"
+A simple "financial health score" that students can improve over time
+
+User:
+I want to have all of those features please.
+Claude:
+Which of these directions feels most relevant to your project? And are there any your brief specifically requires you to address?
