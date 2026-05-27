@@ -1,0 +1,53 @@
+
+
+USER:
+I think we should add a student safety net section as well. Can include a rainy day savings 
+e.g. $1000 in case you are sick from work and won't have enough for rent or something on 
+the car breaks.
+
+CLAUDE:
+That's a really valuable addition — and very relevant for casual workers like our sample 
+student who has no sick leave or guaranteed hours. A single missed week of work could mean 
+not making rent.
+
+Safety Net Section:
+
+The idea would sit between the budget planning and savings goal steps — because it should 
+be funded before holiday savings, not after. Order of priority matters here:
+
+Priority Stack (what gets funded first):
+1. Essential expenses — rent, power, phone (non-negotiable)
+2. Safety net fund — build this before anything else
+3. Savings goals — holidays, car, moving out etc
+4. Discretionary budget — what's left to live on
+
+Safety Net Features:
+- Preset rainy day targets students can choose from:
+  - Basic buffer — $500 (one missed pay)
+  - Standard safety net — $1,000 (covers rent if sick for two weeks)
+  - Full cushion — one month of essential expenses
+- Shows how many weeks of contributions to reach each tier at their current savings rate
+- Tracks it separately from holiday/goal savings so it never gets accidentally spent
+- Finn treats it as non-negotiable — if a student tries to skip it and go straight to 
+  holiday savings, he pushes back
+
+Rainy Day Scenarios it protects against:
+- Missing shifts due to illness
+- Car breakdown (transport to work)
+- Emergency medical or dental
+- Unexpected textbook or uni fee
+- Laptop failure mid-semester
+
+This also gives Finn something concrete to be harsh about — if a student has $0 in a safety 
+net and is spending $70 a week going out, that's a very direct conversation to have.
+
+USER:
+Sounds good, let's start the rebuild.
+
+CLAUDE:
+The safety net was incorporated into Step 4 (Plan Budget) of the 6-step flow with:
+- A dedicated safety net section with target and current saved amounts
+- A progress bar showing how close to the target they are
+- A warning card explaining why casual workers specifically need this before saving for goals
+- The safety net is saved to the JSON persistence file and persists between sessions
+- Finn's system prompt was updated to treat safety net as non-negotiable in advice
