@@ -1,0 +1,53 @@
+User:
+Clearly specify what data you'll work with and what insights you'll generate.
+Claude:
+Here's a data flow definition that maps directly to your features:
+Input: A user-uploaded CSV file containing personal bank transaction data with at minimum three columns — date, description (merchant/transaction name), and amount (positive for income, negative for expenses). Additional columns such as category will be used if present, otherwise the assistant will auto-categorise transactions using keyword matching against common merchant names.
+Processing:
+
+Transactions are cleaned and standardised (date parsing, amount normalisation, duplicate removal)
+Spending is auto-categorised into buckets: Food & Groceries, Coffee & Snacks, Eating Out, Transport, Entertainment, Social, Subscriptions, Shopping, Bills & Utilities, Income, Other
+Each category is analysed for frequency, total spend, average transaction size, and time-of-day/day-of-week patterns
+Recurring and subscription charges are detected by merchant repetition and consistent amounts
+A user-defined budget and savings goal are taken as inputs alongside the CSV
+
+Output Insights:
+
+Invisible spend report — small frequent transactions flagged by category
+Subscription audit — recurring charges listed for review
+Daily allowance remaining based on current burn rate
+Social spending percentage — framed positively against total discretionary spend
+"If you cut X, you could save Y" trade-off statements
+Day-of-week and post-payday spike analysis
+Savings goal progress tracker with projected completion date
+Financial health score (0–100) based on budget adherence and savings rate
+AI-generated plain-English summary and personalised recommendations via get_response()
+
+User:
+Input should also include manual adding in case cash was used. Should also include a way to edit transactions if the category was incorrect.
+Claude:
+Good additions — cash transactions are a real gap in bank exports, and miscategorisation is one of the most common frustrations with automated tools. Here's the updated data flow:
+Input:
+
+A user-uploaded CSV file containing personal bank transaction data with at minimum three columns — date, description (merchant/transaction name), and amount (positive for income, negative for expenses). Additional columns such as category will be used if present, otherwise the assistant will auto-categorise using keyword matching.
+A manual transaction entry form allowing the user to add cash or non-bank transactions by specifying date, description, amount, and category — ensuring cash withdrawals, market purchases, and peer-to-peer payments (e.g. splitting bills) are captured.
+A user-defined monthly budget and savings goal (target amount + target date) entered at the start of the session.
+
+Processing:
+
+Transactions are cleaned and standardised (date parsing, amount normalisation, duplicate removal)
+Spending is auto-categorised into buckets: Food & Groceries, Coffee & Snacks, Eating Out, Transport, Entertainment, Social, Subscriptions, Shopping, Bills & Utilities, Income, Other
+Users can review and edit any transaction's category via an editable transaction table — corrections are applied immediately and all downstream analysis updates to reflect the change
+Each category is analysed for frequency, total spend, average transaction size, and time-of-day/day-of-week patterns
+Recurring and subscription charges are detected by merchant repetition and consistent amounts
+All manual entries are merged with CSV data and treated identically in analysis
+
+User:
+I also think that flagging transactions as essential would be a smart feature as some items such as rent, power bill cannot be reduced
+Claude:
+Absolutely — that's an important distinction. Without it, the AI might suggest cutting spending that simply cannot be cut, which makes the advice feel tone-deaf and unhelpful. Here's the updated data flow with that woven in:
+Added to Processing:
+
+Users can flag any transaction or merchant as essential — rent, power, internet, insurance, medical — marking it as non-discretionary. Essential spend is tracked separately and never targeted by the savings recommendation engine
+Commonly essential merchants (e.g. real estate agencies, utility providers) are pre-flagged automatically, with the user able to override
+The budget is split into two layers: fixed essential spend (informational only) and discretionary spend (where budgeting and optimisation applies)
