@@ -1,0 +1,41 @@
+User:
+What would be inputs and outputs for the program, here is an example:
+Inputs:
+
+CSV file with transaction data (columns: Date, Amount, Category, Description)
+User preferences (spending goals, categories to focus on)
+Time period for analysis
+
+Outputs:
+
+Total spending summary by category
+Average spending patterns
+Spending trend analysis
+Actionable savings recommendations
+Visual spending breakdown (future enhancement)
+
+Claude:
+Here's a version tailored to your full feature set:
+Inputs:
+
+CSV file with transaction data (columns: Date, Description, Amount, and optionally Category)
+Manually entered transactions (date, description, amount, category) for cash and non-bank spending
+Essential flags — user-marked transactions or merchants that cannot be reduced (rent, power, internet)
+Category corrections — user edits to fix auto-categorisation errors
+Monthly discretionary budget (user-defined)
+Savings goal (target amount + target date e.g. "Bali trip — $2,000 by December")
+Time period for analysis (e.g. last 30 days, last 3 months)
+
+Outputs:
+
+Essential vs discretionary spend breakdown — shows committed costs before any choices are made
+Spending summary by category with totals, averages, and transaction counts
+Invisible spend report — small frequent transactions (e.g. coffees, snacks) aggregated and flagged
+Subscription audit — recurring charges listed with estimated monthly and annual cost
+Day-of-week and post-payday spike analysis — when overspending tends to happen
+Social spending health check — social budget as a percentage of discretionary spend, framed positively
+Daily discretionary allowance — how much remains per day for the rest of the month
+"Cut X → save Y" statements — trade-off insights targeting only reducible spend
+Savings goal progress tracker — current progress, weekly contribution needed, projected completion date
+Financial health score (0–100) — based on discretionary budget adherence and savings rate
+AI-generated personalised advice summary via get_response() — plain-English recommendations grounded in the user's actual reducible spending
