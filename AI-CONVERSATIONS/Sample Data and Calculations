@@ -1,0 +1,98 @@
+USER:
+Give me 3 realistic examples of Australian transaction data with different scenarios 
+(normal spending, refunds, large purchases)
+ 
+CLAUDE:
+Here are three realistic Australian student transaction datasets:
+ 
+Scenario 1 — Normal weekly spending (typical uni student, Perth)
+ 
+Date         | Description                    | Amount   | Category
+01/03/2024   | Coles Supermarket Karrinyup    | -87.43   | Food & Groceries
+02/03/2024   | Transperth Smartrider Topup    | -20.00   | Transport
+03/03/2024   | Boost Juice Hay St             | -8.50    | Coffee & Snacks
+04/03/2024   | Spotify Premium                | -11.99   | Subscriptions
+04/03/2024   | McDonald's Northbridge         | -13.20   | Eating Out
+05/03/2024   | Instagram Boost Meta           | -15.00   | Other
+06/03/2024   | Hungry Jacks Murray St         | -11.40   | Eating Out
+07/03/2024   | 7-Eleven Beaufort St           | -6.30    | Coffee & Snacks
+07/03/2024   | Casual Work Payment            | +280.00  | Income
+ 
+Scenario 2 — Refunds and corrections
+ 
+Date         | Description                    | Amount   | Category
+08/03/2024   | ASOS Online Purchase           | -134.99  | Shopping
+09/03/2024   | Woolworths Metro City          | -43.70   | Food & Groceries
+10/03/2024   | ASOS Refund                    | +134.99  | Shopping
+10/03/2024   | Ampol Fuel Osborne Park        | -72.00   | Transport
+11/03/2024   | Netflix Monthly                | -17.99   | Subscriptions
+11/03/2024   | Uber Eats — Nando's            | -29.50   | Eating Out
+12/03/2024   | Centrelink Youth Allowance     | +587.00  | Income
+13/03/2024   | Chemist Warehouse Morley       | -22.40   | Other
+13/03/2024   | eBay Partial Refund            | +18.00   | Shopping
+ 
+Scenario 3 — Large purchases and social spending
+ 
+Date         | Description                    | Amount   | Category
+14/03/2024   | Rent — Realmark Property       | -950.00  | Bills & Utilities
+14/03/2024   | Synergy Power Bill             | -143.20  | Bills & Utilities
+15/03/2024   | JB Hi-Fi Joondalup             | -349.00  | Shopping
+15/03/2024   | Domino's Pizza Online          | -32.80   | Eating Out
+16/03/2024   | The Rechabite Northbridge      | -67.50   | Social
+16/03/2024   | Uber — Northbridge to Home     | -18.40   | Transport
+17/03/2024   | Cotton On Karrinyup            | -54.99   | Shopping
+18/03/2024   | Curtin University Parking      | -12.00   | Transport
+19/03/2024   | Casual Work Payment            | +420.00  | Income
+ 
+---
+ 
+USER:
+This is an example — can you do the manual calculations for the uni student sample data please:
+ 
+Manual Calculations:
+- Total Spending: $45.50 + $12.00 + $89.95 - $15.00 = $132.45
+- By Category: Groceries $45.50, Transport $12.00, Entertainment $89.95
+- Average Transaction: $132.45 ÷ 4 = $33.11
+- Insight: Entertainment represents 67% of positive spending
+ 
+CLAUDE:
+Here are the manual calculations for all three scenarios:
+ 
+Scenario 1 — Normal weekly spending
+- Total Spending: $87.43 + $20.00 + $8.50 + $11.99 + $13.20 + $15.00 + $11.40 + $6.30 = $173.82
+- Total Income: $280.00
+- By Category: Food & Groceries $87.43, Transport $20.00, Coffee & Snacks $14.80, 
+  Subscriptions $11.99, Eating Out $24.60, Other $15.00
+- Average Transaction (expenses only): $173.82 ÷ 8 = $21.73
+- Insight: Eating Out ($24.60) and Coffee & Snacks ($14.80) combined represent 22.7% of spending 
+  despite being small individual purchases
+ 
+Scenario 2 — Refunds and corrections
+- Gross Spending: $134.99 + $43.70 + $72.00 + $17.99 + $29.50 + $22.40 = $320.58
+- Total Refunds: $134.99 + $18.00 = $152.99
+- Net Spending: $320.58 - $152.99 = $167.59
+- Total Income: $587.00
+- By Category (net): Shopping $0.00 (fully refunded), Food & Groceries $43.70, Transport $72.00, 
+  Subscriptions $17.99, Eating Out $29.50, Other $22.40
+- Average Transaction (expenses only, pre-refund): $320.58 ÷ 6 = $53.43
+- Insight: After refunds, Transport ($72.00) is the largest spending category at 42.9% of net spend
+ 
+Scenario 3 — Large purchases and social spending
+- Total Spending: $950.00 + $143.20 + $349.00 + $32.80 + $67.50 + $18.40 + $54.99 + $12.00 = $1,627.89
+- Total Income: $420.00
+- Essential Spend: $950.00 + $143.20 = $1,093.20 (67.2% of total spend)
+- Discretionary Spend: $1,627.89 - $1,093.20 = $534.69
+- Average Transaction (expenses only): $1,627.89 ÷ 8 = $203.49
+- Discretionary Average (excluding essentials): $534.69 ÷ 6 = $89.12
+- Insight: Once essential costs are removed, Shopping ($403.99) represents 75.6% of all 
+  discretionary spend — the JB Hi-Fi purchase alone accounts for $349.00 of that
+ 
+Combined across all three scenarios
+- Total Gross Spending: $173.82 + $320.58 + $1,627.89 = $2,122.29
+- Total Refunds: $152.99
+- Total Net Spending: $1,969.30
+- Total Income: $280.00 + $587.00 + $420.00 = $1,287.00
+- Net Position: $1,287.00 - $1,969.30 = -$682.30 (deficit, largely driven by rent)
+- Essential Spend: $1,093.20 (55.5% of gross spend)
+- Discretionary Net Spend: $1,969.30 - $1,093.20 = $876.10
+ 
