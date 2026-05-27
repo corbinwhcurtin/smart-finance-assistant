@@ -1,0 +1,73 @@
+
+USER:
+Create a function to load CSV transaction data with Date, Amount, Category, Description columns. 
+Handle dollar signs in Amount, missing values, and data validation. Include clear business-focused 
+error messages.
+
+CLAUDE:
+Here is the complete CSV loading and cleaning function:
+
+def load_and_clean_transaction_data(file_path):
+    """
+    Loads and cleans bank transaction data from a CSV file.
+    Handles common bank export formats including dollar signs,
+    missing values, and inconsistent date formats.
+    """
+    # Step 1: Load the data
+    # Step 2: Standardise column names
+    # Step 3: Check required columns exist
+    # Step 4: Clean the Amount column — remove $ signs and commas
+    # Step 5: Clean the Date column — handle DD/MM/YYYY Australian format
+    # Step 6: Clean the Description column
+    # Step 7: Add Category column if missing
+    # Step 8: Add Essential flag column
+    # Step 9: Remove duplicates
+    # Step 10: Sort and reset index
+    # Step 11: Print final summary
+
+[Full function code was generated and tested]
+
+---
+
+USER:
+Code in cell 2:
+clean_data = load_and_clean_transaction_data("transactions.csv")
+print(clean_data)
+
+Error: File not found. Please check the file path and try again. None
+
+CLAUDE:
+That error is expected and actually means your function is working perfectly — it caught the 
+missing file and returned a friendly message instead of crashing.
+
+You just need to give it a real file to load. You have two options:
+
+Option A — Use the sample data from your planning stage (easiest, no file needed):
+Replace Cell 2 with sample DataFrame code using the transactions we created earlier.
+
+Option B — Upload a real CSV file to Colab:
+    from google.colab import files
+    uploaded = files.upload()  # opens a file picker dialog
+
+Then load it by name:
+    clean_data = load_and_clean_transaction_data("your_file_name.csv")
+
+---
+
+USER:
+Can you create a CSV file with university sample data with 30 transactions please?
+
+CLAUDE:
+[Generated transactions.csv with 30 realistic Australian student transactions covering all 
+three scenarios from the planning stage — income, essential expenses, discretionary spending, 
+refunds, and subscriptions. File created and available for download.]
+
+Key features of the sample data:
+- 3 income entries (casual work + Centrelink)
+- Essential expenses — rent, power, phone
+- Subscriptions — Spotify, Netflix, Disney+
+- Invisible spending — multiple small Boost Juice and snack purchases
+- Social spending — two nights out in Northbridge
+- A refund — ASOS purchase and refund pair
+- A large purchase — JB Hi-Fi
+- Mixed eating out, groceries, transport, and shopping
