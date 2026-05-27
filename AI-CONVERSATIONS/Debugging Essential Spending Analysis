@@ -1,0 +1,45 @@
+
+
+USER:
+Test worked great apart from the last part came out a bit messy with formatting.
+Bills & Utilities is showing as discretionary spending — total_essential shows $0.00
+even though rent and power are in the data.
+
+CLAUDE:
+Two issues to fix here:
+
+1. Bills & Utilities is being treated as discretionary — rent and power should be essential 
+   but the essential flag is all False in the sample CSV because we never ran the essential 
+   flagging step.
+
+2. The dictionary is printing to screen — because print(clean_data) at the end is printing 
+   the return value.
+
+Fix 1 — Add an essential flagging cell before the analysis:
+    def flag_essential_transactions(df):
+        essential_keywords = [
+            'rent', 'synergy', 'alinta', 'insurance', 'realmark',
+            'ray white', 'lj hooker', 'optus', 'telstra', 'medicare',
+            'electricity', 'water', 'internet', 'gas'
+        ]
+        for keyword in essential_keywords:
+            mask = df['description'].str.lower().str.contains(keyword, na=False)
+            df.loc[mask, 'essential'] = True
+        return df
+
+Fix 2 — Run flagging before analysis, and suppress the dictionary output:
+    # Step 1 - flag essentials first
+    clean_data = flag_essential_transactions(clean_data)
+    # Step 2 - run analysis (no print wrapping it)
+    analysis = analyse_spending_by_category(clean_data)
+
+The dictionary printing was happening because the notebook was auto-displaying the return 
+value of the last line. Assigning it to analysis without wrapping in print() stores it silently.
+
+---
+
+KEY LESSON LEARNED:
+This highlighted why the essential flagging step must run before analysis. Without it, rent 
+($1,050) was being counted as discretionary spend, making the financial picture look much 
+worse than it actually was and causing the AI to give incorrect advice about reducing spending 
+that the student has no control over.
