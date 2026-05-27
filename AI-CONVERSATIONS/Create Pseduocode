@@ -1,0 +1,86 @@
+USER:
+Based on the program we have discussed and the planning stages, please write out the pseudocode 
+for the program in plain English format (not technical/coding format).
+ 
+CLAUDE:
+Here is the pseudocode in plain English:
+ 
+FUNCTION: Load and Clean Data
+- Ask the user to upload their bank CSV file
+- Check the file has at least a date, description, and amount column
+- Tidy up the data by fixing date formats, removing dollar signs, and deleting any blank or 
+  duplicate rows
+- If the user has added any cash transactions manually, add those into the same list
+- Hand the cleaned list of transactions to the next step
+ 
+FUNCTION: Categorise Transactions
+- Look at the description of each transaction
+- Compare it against a list of known merchant names and keywords
+- Assign the most appropriate category such as Food, Transport, or Social
+- If the transaction already has a category, leave it as is
+- If nothing matches, label it as Other
+- Hand the categorised list to the next step
+ 
+FUNCTION: Flag Essential Transactions
+- Automatically mark known essential merchants such as rent, power, and phone bills as essential
+- Show the user a table of all transactions so they can review the categories and essential flags
+- Allow the user to correct any category that was wrong
+- Allow the user to mark or unmark any transaction as essential
+- Whenever the user makes a change, update all the analysis immediately
+ 
+FUNCTION: Analyse Spending
+- Separate transactions into three buckets — income, essential expenses, and discretionary expenses
+- Calculate the total for each bucket
+- Subtract any refunds from the relevant categories so they are not double counted
+- For each discretionary category work out the total spent, number of transactions, and average 
+  transaction size
+- Work out how much of the monthly budget has been used and how much is left per day
+- Look for invisible spending by finding small purchases under fifteen dollars that happen 
+  repeatedly in the same week
+- Look for subscriptions by finding the same merchant charging a similar amount every month
+- Return a summary of all these figures
+ 
+FUNCTION: Detect Spending Patterns
+- Work out which day of the week the student tends to spend the most
+- Check if spending jumps noticeably in the days immediately after payday
+- Look at social spending as a percentage of total discretionary spend and give it a positive label
+- Return these pattern observations
+ 
+FUNCTION: Track Savings Goal
+- Take the goal name, target amount, and target date from the user
+- Work out how much has been saved so far based on income minus all expenses
+- Calculate what percentage of the goal has been reached
+- Work out how much needs to be set aside each week to hit the goal on time
+- For each discretionary category suggest how many weeks sooner the goal could be reached if 
+  that category was reduced by half
+- Flag the goal as at risk if the required weekly saving is unrealistically high
+- Return the goal progress and suggestions
+ 
+FUNCTION: Calculate Financial Health Score
+- Start with a perfect score of 100
+- Reduce the score if spending has gone over the monthly budget
+- Reduce the score if invisible spending makes up a large portion of discretionary spend
+- Reduce the score if subscriptions are taking up too much of the budget
+- Reduce the score if very little is being saved relative to income
+- Add points back if the savings goal is on track
+- Keep the final score between 0 and 100
+- Assign a plain English label such as On Track, Needs Attention, At Risk, or Action Required
+- Return the score and label
+ 
+FUNCTION: Generate AI Advice
+- Gather a plain English summary of the student's finances
+- Send this summary to the AI along with instructions to be direct and non-judgmental
+- Tell the AI to never suggest cutting essential spending
+- Tell the AI to focus first on invisible spend and unused subscriptions
+- Display the AI's personalised recommendations to the user
+- Allow the user to ask follow up questions in a chat interface
+ 
+FUNCTION: Build the Interface
+- Create a simple six step interface using Gradio
+- Step 1 lets the user upload their CSV
+- Step 2 lets the user add manual cash transactions and edit the transaction table
+- Step 3 shows a spending dashboard with category totals, charts, and subscription alerts
+- Step 4 lets the user set their budget, safety net, and savings goals
+- Step 5 shows the budget summary and goal progress
+- Step 6 is the AI advice chatbot
+- Whenever any data changes, recalculate everything and refresh all the displays
