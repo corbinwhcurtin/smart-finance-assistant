@@ -1,101 +1,99 @@
-# 📊 Smart Finance Assistant – Student Project Template
+# Smart Finance Assistant
 
-<!-- BADGES:START -->
-[![curtin](https://img.shields.io/badge/-curtin-f57c00?style=flat-square)](https://github.com/topics/curtin) [![ai-assistant](https://img.shields.io/badge/-ai--assistant-blue?style=flat-square)](https://github.com/topics/ai-assistant) [![chatbot](https://img.shields.io/badge/-chatbot-blue?style=flat-square)](https://github.com/topics/chatbot) [![edtech](https://img.shields.io/badge/-edtech-4caf50?style=flat-square)](https://github.com/topics/edtech) [![finance](https://img.shields.io/badge/-finance-blue?style=flat-square)](https://github.com/topics/finance) [![financial-tools](https://img.shields.io/badge/-financial--tools-blue?style=flat-square)](https://github.com/topics/financial-tools) [![gradio](https://img.shields.io/badge/-gradio-blue?style=flat-square)](https://github.com/topics/gradio) [![jupyter-notebook](https://img.shields.io/badge/-jupyter--notebook-blue?style=flat-square)](https://github.com/topics/jupyter-notebook) [![python](https://img.shields.io/badge/-python-3776ab?style=flat-square)](https://github.com/topics/python) [![rag](https://img.shields.io/badge/-rag-blue?style=flat-square)](https://github.com/topics/rag)
-<!-- BADGES:END -->
-
-Welcome to your project repository for the **ISYS2001 Final Programming Project**. This repo provides a starting point for building your **Smart Finance Assistant**.
-
----
-
-## 📖 Project Overview
-In this project, you will design and implement a **Smart Finance Assistant** using:
-- Python (Google Colab)
-- [hands-on-ai](https://pypi.org/project/hands-on-ai/) (chat, RAG, agent tools)
-- [Gradio](https://www.gradio.app/) (to create a simple app interface)
-
-Your Assistant should include:
-- **Chat**: a finance-oriented personality bot
-- **RAG**: retrieval from CSV or other documents
-- **Agent Tool**: one custom tool (e.g., budget calculator, currency converter)
-- **Gradio UI**: a simple interface tying everything together
-- **Tests**: a Testing Section in your notebook
+A personal finance analysis and budgeting tool built for Australian university students. 
+Upload your bank transaction data, understand your spending patterns, build a forward-looking 
+budget, and track savings goals over time — with AI-powered advice from Finn, your no-nonsense 
+financial coach.
 
 ---
 
-## 📂 Suggested Repo Layout
-You may adapt this structure or create your own. Clarity and organisation are graded in the rubric.
+## What It Does
 
-```
-/README.md            ← this file
-/assignment.pdf       ← official assignment specification
-/starter_notebook.ipynb  ← scaffold notebook with six-step method
-/example_diary.md     ← sample Developer’s Diary entries
-/data/                ← your CSVs or sample datasets
-/tests/               ← your test scripts or asserts
-/ai-conversations/    ← weekly AI Evidence Packages (screenshots, notes)
-/docs/                ← pseudocode, design notes, planning docs
-```
+Most budgeting tools show you what you spent but don't help you change anything. This assistant 
+analyses your actual bank data, identifies where money is quietly disappearing, and helps you 
+build a realistic budget based on what you actually spend — not what you wish you spent.
+
+Built specifically for casual workers and university students who have high fixed costs like rent, 
+irregular income, no sick leave, and real social lives worth budgeting for.
 
 ---
 
-## 🚀 Getting Started
-1. Open the `starter_notebook.ipynb` in Google Colab.
-2. Follow the **six-step methodology**:
-   1. Understand the problem
-   2. Identify inputs and outputs
-   3. Work the problem by hand
-   4. Write pseudocode
-   5. Convert to Python
-   6. Test with a variety of data
-3. Add at least one **meaningful GitHub commit per week** (Weeks 8–12).
-4. Document AI use in your **Developer’s Diary** (`/ai-conversations/` folder or a markdown file).
+## Features
+
+- **CSV Import** — Upload any bank export with Date, Description, and Amount columns
+- **Auto-categorisation** — Transactions automatically sorted into 10 spending categories
+- **Essential flagging** — Rent, power, and phone bills tracked separately and never targeted for cuts
+- **Spending insights** — Category breakdowns, invisible spending detection, subscription audit, day-of-week patterns
+- **Financial health score** — 0 to 100 score with honest assessment of your position
+- **Forward-looking budget** — Set monthly limits per category based on your actual history
+- **Safety net tracker** — Separate savings target for emergencies before holiday goals
+- **Savings goals** — Track progress toward specific goals with projected completion dates
+- **Month-on-month comparison** — Upload each month to see if you are improving
+- **AI recommendations** — Personalised advice based on your real numbers
+- **Finn chatbot** — Ask follow-up questions with full awareness of your spending data and budget
+- **Persistent storage** — Budget plan and monthly history saved automatically to JSON
 
 ---
 
-## ✅ Submission Requirements
-- Colab Notebook with full project implementation
-- GitHub repository with:
-  - Notebook, README, and Developer’s Diary
-  - Weekly AI Evidence Packages (Weeks 8–12)
-  - Meaningful commit history
-- Developer’s Diary entries that include:
-  - **Artifact**: screenshot or snippet of AI use
-  - **Context**: your goal
-  - **Reflection**: what worked, what didn’t, what you learned
+## How to Run
+
+1. Open the notebook in Google Colab
+2. Go to **Runtime → Run all**
+3. Wait for all cells to complete — the Gradio interface will launch from Cell 10
+4. Upload your bank CSV in Step 1 and follow the 6-step flow
 
 ---
 
-## 📊 Assessment Criteria (Summary)
-- **Functionality** – chatbot, RAG, tool, and UI integrated (30%)
-- **Testing & Debugging** – clear tests, meaningful edge cases (20%)
-- **AI Collaboration & Progress** – AI evidence + weekly commits (20%)
-- **Business Relevance** – meaningful finance problem (15%)
-- **Clarity & Reflection** – repo organisation, README, diary (15%)
+## CSV Format
 
-For the full rubric, see `assignment.pdf`.
+Your bank export needs at minimum these three columns:
 
----
+| Column | Description | Example |
+|--------|-------------|---------|
+| Date | Transaction date | 03/01/2025 |
+| Description | Merchant or transaction name | Coles Supermarket Karrinyup |
+| Amount | Positive for income, negative for expenses | -87.43 |
 
-## 📚 Resources
-
-- **hands-on-ai Package**: [GitHub Repository](https://github.com/michael-borck/hands-on-ai)
-- **Documentation**: [DeepWiki Guide](https://deepwiki.com/michael-borck/hands-on-ai)
-- **For AI Assistants**: Share [this LLM context file](https://github.com/michael-borck/hands-on-ai/blob/main/LLM.txt) with ChatGPT/Claude/Copilot for better code suggestions
+A Category column will be used if present, otherwise categories are assigned automatically.
 
 ---
 
-## 💡 Tips
-- Keep your commits small and descriptive.
-- Use AI as a coding partner, not a crutch.
-- Remember: **undocumented AI use = misconduct**.
+## Tech Stack
 
-Good luck, and have fun building your Finance Assistant! 🎉
+- **Python** — Core language
+- **Pandas** — Data processing and analysis
+- **Plotly** — Interactive charts and visualisations
+- **Gradio** — Web interface
+- **hands-on-ai** — AI chat, RAG retrieval, and agent tools
+- **gemma3:4b** — Large language model via Ollama
 
 ---
 
-## 📜 License
+## Project Structure
 
-The template code in this repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+smart-finance-assistant/
+│
+├── starter_notebook.ipynb   # Main notebook — all code and UI
+├── finance_knowledge.txt    # RAG knowledge base (auto-generated on first run)
+├── finance_data.json        # Saved budget and monthly history (auto-generated)
+└── README.md                # This file
 
-You are free to license your own work (your project code) under any license you choose.
+---
+
+## Sample Data
+
+Two sample CSV files are included for testing:
+
+- `transactions_3months.csv` — January to March 2025, tight budget (~$44/week leftover)
+- `transactions_months4to6.csv` — April to June 2025, improved spending (~$139/week leftover)
+
+Upload Month 1 first, complete the full 6-step flow and save a budget plan, then upload Month 2 
+to see the comparison and trend features in action.
+
+---
+
+## Built For
+
+ISYS2001 — Business Information Systems  
+Curtin University, 2026 
+Smart Finance Assistant Project
