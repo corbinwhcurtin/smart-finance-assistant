@@ -1,0 +1,51 @@
+
+
+USER:
+Error: TypeError: create_savings_calculator_tool.locals.savings_goal_calculator() 
+missing 1 required positional argument: 'monthly_contribution'
+
+CLAUDE:
+The issue is clear from the error — the agent is calling the function with a single input 
+string rather than multiple arguments. 
+
+The hands_on_ai agent passes one single string to the tool function, so we need to redesign 
+it to accept a single string and parse it internally.
+
+The problem with the original design:
+    def savings_goal_calculator(target_amount, monthly_contribution, current_savings):
+        # agent can't call this with multiple arguments
+
+The fix — accept a single string and parse it:
+    def savings_goal_calculator(input: str) -> str:
+        # Parse: "target=2000, monthly=150, current=350"
+        params = {}
+        for part in input.split(","):
+            if "=" in part:
+                key, value = part.strip().split("=")
+                params[key.strip()] = float(value.strip())
+        
+        target_amount        = params.get("target", 0)
+        monthly_contribution = params.get("monthly", 0)
+        current_savings      = params.get("current", 0)
+
+The tool description was also updated to tell the agent the expected input format:
+    description = (
+        "Calculates how long it will take to reach a savings goal. "
+        "Input format: 'target=2000, monthly=150, current=350'"
+    )
+
+---
+
+USER:
+Test Calculator — this now gives an error because the function signature changed:
+print(savings_calculator(target_amount=2000.00, monthly_contribution=150.00, current_savings=350.00))
+
+CLAUDE:
+Since we changed the function to accept a single string input for agent compatibility, 
+the direct test call needs to match that format:
+
+    print(savings_calculator("target=2000, monthly=150, current=350"))
+
+This demonstrates a key trade-off in agent tool design — the function signature must match 
+what the agent framework expects, which sometimes means changing how you call it directly 
+during testing as well.
