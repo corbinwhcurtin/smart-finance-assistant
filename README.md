@@ -69,16 +69,6 @@ A Category column will be used if present, otherwise categories are assigned aut
 
 ---
 
-## Project Structure
-
-smart-finance-assistant/
-│
-├── starter_notebook.ipynb   # Main notebook — all code and UI
-├── finance_knowledge.txt    # RAG knowledge base (auto-generated on first run)
-├── finance_data.json        # Saved budget and monthly history (auto-generated)
-└── README.md                # This file
-
----
 
 ## Sample Data
 
