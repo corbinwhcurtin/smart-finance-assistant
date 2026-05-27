@@ -1,0 +1,100 @@
+
+USER:
+def analyse_spending_by_category(df, monthly_budget=1500.00):
+I don't think there is an input for monthly_budget, should we add one?
+
+CLAUDE:
+Yes, absolutely — right now the budget is hardcoded to $1,500 which means every student gets 
+the same number regardless of their actual situation. It should definitely be an input.
+
+The cleanest way to handle it in a Colab notebook is to ask the student at the start of their 
+session:
+    monthly_budget = float(input("What is your monthly discretionary budget? $"))
+    analysis = analyse_spending_by_category(clean_data, monthly_budget=monthly_budget)
+
+---
+
+USER:
+Or would it be better to analyse spending first then create budgets after?
+
+CLAUDE:
+Yes, that's actually the smarter order. Here's why:
+
+Analyse first, budget second makes more sense because:
+- The student can see what they actually spend before guessing a budget number
+- A student who sees they spend $800/month on discretionary items shouldn't be setting a $400 
+  budget — they'd fail immediately
+- The analysis reveals their baseline reality — the budget should be set against that, not 
+  in the dark
+- It mirrors how a real financial advisor works — understand the situation first, then set targets
+
+So the better flow for your notebook is:
+1. Upload CSV
+2. Clean and categorise data
+3. Analyse spending (see what's actually happening)
+4. Review category breakdown and insights
+5. NOW set a monthly budget (informed by what you just saw)
+6. Set savings goal (now you know what's realistic)
+7. Get AI advice (budget + goal + analysis all feed in together)
+
+USER:
+Yes please update analyse_spending to remove the monthly_budget parameter.
+
+CLAUDE:
+[Function updated — monthly_budget parameter removed from analyse_spending_by_category. 
+The function now outputs a prompt at the end directing the student to set their budget in 
+the next step, using the analysis they just saw as a basis for realistic goal-setting.]
+
+This was an important design decision — it changed the application flow from budget-first 
+to insights-first, making the tool more useful and the budgets more realistic.
+
+
+
+USER:
+Error: HTTPError: 404 Client Error: Not Found for url: https://ollama.locollm.org/api/embeddings
+
+CLAUDE:
+The error means the server at ollama.locollm.org doesn't support the embeddings API endpoint. 
+The hands_on_ai rag.get_embeddings() function is trying to call /api/embeddings but that 
+endpoint doesn't exist on this server.
+
+We have two options:
+
+Option A — Skip embeddings, use keyword matching instead
+Build a simpler RAG that searches chunks by keyword relevance rather than vector similarity — 
+works without an embeddings endpoint and still satisfies the RAG requirement.
+
+Option B — Check if embeddings work on this server
+Run this quick test first:
+    test_chunks = ["test finance chunk"]
+    try:
+        test_index = rag.get_embeddings(test_chunks)
+        print("Embeddings supported!")
+    except Exception as e:
+        print(f"Embeddings not supported: {e}")
+
+USER:
+Test result: Embeddings not supported: 404 Client Error
+
+CLAUDE:
+Embeddings aren't supported on this server so we'll go with Option A — keyword-based RAG.
+
+This still fully satisfies the RAG requirement since it retrieves relevant knowledge before 
+generating an answer, it just uses keyword matching instead of vector similarity.
+
+How the keyword RAG works:
+1. Load the finance knowledge text file
+2. Chunk it into sections using rag.chunk_text() (which IS supported)
+3. For each question, score chunks by counting keyword matches
+4. Take the top 3 most relevant chunks
+5. Pass them to get_response() as context for the answer
+
+This approach actually has advantages for this use case:
+- No dependency on server capabilities
+- Transparent and debuggable — you can see exactly why a chunk was retrieved
+- Fast — no embedding computation needed
+- Domain-specific keywords work well for finance topics
+
+The knowledge base was built with 14 topic sections covering: budgeting basics, coffee and 
+snacks, subscriptions, food and groceries, eating out, social spending, invisible spending, 
+shopping, savings goals, emergency funds, payday habits, transport, income, and entertainment.
