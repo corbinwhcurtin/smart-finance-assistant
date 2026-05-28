@@ -1,0 +1,71 @@
+
+USER:
+Before we start I can upload my .ipynb so we know what to change?
+
+CLAUDE:
+Yes please, upload it and I'll review the full notebook before we start.
+
+[Student uploaded starter_notebook.ipynb]
+
+CLAUDE (after reviewing):
+Good, I've reviewed the full notebook. Here's what I found:
+
+What exists and is working:
+- Cell 1  — pip install + core imports
+- Cell 2  — hands-on-ai configuration
+- Cell 3  — load_and_clean_transaction_data()
+- Cell 4  — flag_essential_transactions() (old version)
+- Cell 5  — analyse_spending_by_category() (updated version)
+- Cell 6  — generate_ai_recommendations()
+- Cell 7  — Finance chatbot (create_finance_chat_personality, run_finance_chat)
+- Cell 8  — RAG knowledge base + setup_financial_rag() + ask_finance_rag()
+- Cell 9  — FinanceRAG class (duplicate)
+- Cell 10 — create_savings_calculator_tool() + agent registration
+- Cell 11 — Full Gradio UI (tab-based version)
+- Cell 12 — Integration test stubs (empty pass functions)
+
+My plan — clean set of 10 cells:
+
+    Cell 1  — Setup & Imports (keep, add plotly)
+    Cell 2  — AI Configuration (keep)
+    Cell 3  — Data Persistence (NEW — JSON save/load)
+    Cell 4  — Data Loading, Cleaning & Categorisation (updated, combines old cells)
+    Cell 5  — Spending Analysis Engine (updated — no emojis, harsher insights)
+    Cell 6  — RAG System (keep, tidy up)
+    Cell 7  — Agent Tool (keep, tidy up)
+    Cell 8  — AI Recommendations & Finn (updated — harsher tone)
+    Cell 9  — Gradio UI (full rebuild — 6-step flow)
+    Cell 10 — Launch
+
+Cell 1 — updated to add plotly:
+
+    # ── Cell 1: Setup & Imports ───────────────────────────────────
+    !pip install gradio pandas hands-on-ai plotly -q
+
+    import os
+    import json
+    import calendar
+    import warnings
+    import numpy as np
+    import pandas as pd
+    import plotly.graph_objects as go
+    import plotly.express as px
+    import plotly
+    import gradio as gr
+
+    from datetime import datetime, date
+    from pathlib import Path
+    from typing import Optional
+
+    warnings.filterwarnings('ignore')
+
+    print("Libraries loaded successfully.")
+    print(f"  Pandas:  {pd.__version__}")
+    print(f"  Plotly:  {plotly.__version__}")
+    print(f"  Gradio:  {gr.__version__}")
+
+Cell 10 — launch:
+
+    # ── Cell 10: Launch ───────────────────────────────────────────
+    finance_app = create_finance_assistant_ui()
+    finance_app.launch(debug=True, share=False)

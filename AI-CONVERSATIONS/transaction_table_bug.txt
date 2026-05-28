@@ -1,0 +1,53 @@
+
+USER:
+Step 1 view after I upload this CSV, can't see transaction data. The table just shows
+columns labelled 1, 2, 3 instead of the actual data.
+
+CLAUDE:
+The navigation bar looks great! The transaction table showing columns 1, 2, 3 instead of
+the actual data means the DataFrame is being passed but Gradio isn't recognising the column
+names correctly.
+
+The issue is in the next_to_step2 click handler — it's passing app_state["current_df"]
+directly but Gradio needs it formatted properly, and critically the date column contains
+datetime objects which Gradio can't render cleanly.
+
+The fix — create a new handler that formats the DataFrame before passing it:
+
+    def handle_goto_step2():
+        nav_state["max_reached"] = max(nav_state["max_reached"], 2)
+        df = app_state["current_df"]
+        if df is not None:
+            display_df = df[["date", "description", "amount",
+                              "category", "essential"]].copy()
+            # Convert datetime to string for Gradio display
+            display_df["date"] = display_df["date"].dt.strftime("%d/%m/%Y")
+        else:
+            display_df = None
+        return (
+            gr.update(visible=False),
+            gr.update(visible=True),
+            display_df,
+            nav_html(2, nav_state["max_reached"])
+        )
+
+    next_to_step2.click(
+        fn      = handle_goto_step2,
+        inputs  = [],
+        outputs = [step1_group, step2_group, edit_table, nav_bar]
+    )
+
+The same fix was also applied inside handle_upload so the Step 1 preview table
+also shows dates correctly:
+
+    def handle_upload(file):
+        ...
+        preview = df[["date","description","amount",
+                      "category","essential"]].head(10).copy()
+        preview["date"] = preview["date"].dt.strftime("%d/%m/%Y")
+        ...
+
+KEY LESSON:
+Gradio Dataframe components need Python-native types (strings, floats, booleans).
+Pandas datetime64 objects need to be converted to strings before display, otherwise
+Gradio falls back to displaying column index numbers instead of column names.

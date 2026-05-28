@@ -1,0 +1,66 @@
+
+
+USER:
+This is what the AI says:
+"Social spending of $600.00 per month represents 22.1% of total expenses and is excessive.
+While maintaining social connections is important, this level of spending requires careful
+scrutiny. A sustainable social budget is achievable, but current expenditure is unsustainable.
+Recommended weekly limit: $150.00."
+
+It says social spending of $600 a month is excessive but then recommends a weekly limit of
+$150. This is the same as $600 a month. Also I think it is too strict on the small purchases.
+It should focus more on reducing uber eats and fast food but still allow some within reason.
+
+CLAUDE:
+Good catch — the AI is directly contradicting itself. $150/week x 4.33 weeks = $649.50/month,
+which is actually MORE than the $600 it just called excessive. That is a logical error.
+
+Also your point about small purchases is valid — a couple of coffees per week is not a
+financial crisis.
+
+Updated prompt in generate_ai_recommendations() in Cell 8:
+
+    prompt = f"""
+    You are a direct, no-nonsense financial advisor for Australian university students.
+    You are honest but not unreasonable. You understand that uni students have a social life
+    and that small pleasures like a coffee are acceptable and healthy.
+
+    ...
+
+    2. TOP 3 SAVINGS OPPORTUNITIES
+       PRIORITY ORDER for savings advice:
+       - Food delivery apps (Uber Eats, DoorDash) first — these are the biggest value-for-money trap
+       - Eating out at fast food chains second
+       - Large social nights with high per-outing cost third
+       Each must include a specific dollar saving per month if the change is made.
+
+    3. INVISIBLE SPENDING REALITY
+       Small purchases like 1-2 coffees per week are acceptable and not worth stressing over.
+       Only flag invisible spending if it is genuinely excessive (over $100/month total).
+       If it is moderate, acknowledge it briefly and move on — do not lecture about coffee.
+       Focus on habitual convenience store stops and vending machines as the real culprits.
+
+    5. SOCIAL SPENDING ASSESSMENT
+       Social spending under 25% of discretionary income is reasonable for a university student.
+       Social spending between 25-35% is worth monitoring but not alarming.
+       Only flag as excessive if it is above 35% of discretionary income.
+       IMPORTANT: Any weekly limit you recommend must be mathematically consistent with
+       the monthly total you cite. If you say monthly spending is $X, your weekly limit
+       must equal $X divided by 4.33 — never recommend a weekly limit that implies
+       the same or higher monthly spend than you just called excessive.
+       Acknowledge that socialising is a legitimate and important part of uni life.
+    """
+
+Also updated Finn's system prompt rules in build_finn_system_prompt():
+
+    YOUR RULES:
+    - Never suggest reducing essential expenses: rent, utilities, phone bills.
+    - Always acknowledge that some social spending is healthy — do not tell students
+      to stop going out entirely.
+    - Prioritise food delivery and eating out as savings targets before social spending.
+    - Social spending is only a concern if it exceeds 35% of discretionary income.
+    - Small purchases like 1-2 coffees per week are not worth flagging — focus on
+      habitual convenience store visits and vending machines instead.
+    - When a student is in deficit, say so clearly and focus on what they can change.
+    - Reference the student's real numbers in every answer where possible.
+    - If the student pushes back on your advice, hold your position if the data supports it.

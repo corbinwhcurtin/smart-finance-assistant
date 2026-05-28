@@ -1,0 +1,127 @@
+
+USER:
+After testing there are a few problems:
+1. When in step 6 to upload more data, you have to remove the already uploaded data to put
+   more in. After uploaded at step 6 it takes you right back to step 3. The budget should
+   already be set — it should go to analysis and then providing feedback on if you are
+   sticking to the budget.
+2. I think adding tabs back to the top to quickly jump between steps would be helpful.
+3. Adding a clear all data button would be great to start again with fresh data and planning.
+
+CLAUDE:
+Good observations. Here is the full plan:
+
+Fix 1 — New month upload flow:
+When uploading next month's data the flow should be:
+- Step 1 — upload new CSV
+- Step 2 — review and edit
+- Step 3 — analysis WITH comparison against last month's budget
+- Skip Step 4 (budget already set) — go straight to Step 5
+- Step 6 — Finn has context of both old budget and new month's performance
+
+A flag called "returning_user" controls this — if a budget plan already exists,
+the next button on Step 3 skips to Step 5 instead of Step 4.
+
+Fix 2 — Navigation bar at the top:
+A nav_html() function generates a row of step indicators:
+
+    def nav_html(current_step: int, max_reached: int) -> str:
+        steps = [
+            "1. Import", "2. Edit", "3. Insights",
+            "4. Plan", "5. Budget", "6. Chat"
+        ]
+        buttons = ""
+        for i, label in enumerate(steps, start=1):
+            if i == current_step:
+                style = (f"padding:8px 16px; border-radius:20px; font-size:13px; "
+                         f"font-weight:600; border:2px solid {COLOURS['navy']}; "
+                         f"background:{COLOURS['navy']}; color:white; cursor:pointer;")
+            elif i <= max_reached:
+                style = (f"padding:8px 16px; border-radius:20px; font-size:13px; "
+                         f"font-weight:600; border:2px solid {COLOURS['green']}; "
+                         f"background:white; color:{COLOURS['green']}; cursor:pointer;")
+            else:
+                style = (f"padding:8px 16px; border-radius:20px; font-size:13px; "
+                         f"font-weight:600; border:2px solid {COLOURS['border']}; "
+                         f"background:white; color:{COLOURS['text_muted']}; "
+                         f"cursor:not-allowed;")
+            buttons += f'<span style="{style}">{label}</span>'
+        return f'<div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;">{buttons}</div>'
+
+Fix 3 — Clear all data button placed in a collapsible Accordion:
+
+    with gr.Accordion("Reset / Clear All Data", open=False):
+        gr.HTML("""
+    <div class="card insight-critical">
+      <strong>Warning:</strong> This will permanently delete all saved data
+      including your budget plan, savings goals, and all monthly history.
+      This cannot be undone.
+    </div>""")
+        with gr.Row():
+            clear_confirm = gr.Textbox(
+                label='Type "YES" to confirm',
+                placeholder="YES",
+                scale=2
+            )
+            clear_btn = gr.Button("Clear All Data", variant="stop", scale=1)
+        clear_status = gr.Textbox(label="Status", interactive=False)
+
+    def handle_clear_all(confirm):
+        if confirm != "YES":
+            return ("Type YES in the confirmation box to clear all data.",
+                    nav_html(1, 1))
+        app_state["budget_plan"]       = None
+        app_state["safety_net"]        = None
+        app_state["savings_goals"]     = []
+        app_state["monthly_snapshots"] = []
+        app_state["current_df"]        = None
+        app_state["current_analysis"]  = None
+        app_state["current_label"]     = None
+        nav_state["max_reached"]       = 1
+        if Path(SAVE_FILE).exists():
+            Path(SAVE_FILE).unlink()
+        return ("All data cleared. Refresh the page to start fresh.",
+                nav_html(1, 1))
+
+Returning user detection in next_from_step3_handler():
+
+    def next_from_step3_handler():
+        returning = app_state.get("budget_plan") is not None
+        nav_state["max_reached"] = max(
+            nav_state["max_reached"], 5 if returning else 4)
+        if returning:
+            summary    = build_budget_summary_html(
+                app_state["budget_plan"],
+                app_state["current_analysis"])
+            prog_chart = build_savings_progress_chart(
+                app_state["budget_plan"].get("goals", []))
+            return (
+                gr.update(visible=False),  # hide step 3
+                gr.update(visible=False),  # skip step 4
+                gr.update(visible=True),   # show step 5
+                summary,
+                prog_chart if prog_chart else go.Figure(),
+                gr.update(visible=True if prog_chart else False),
+                nav_html(5, nav_state["max_reached"])
+            )
+        else:
+            return (
+                gr.update(visible=False),  # hide step 3
+                gr.update(visible=True),   # show step 4
+                gr.update(visible=False),  # hide step 5
+                "",
+                go.Figure(),
+                gr.update(visible=False),
+                nav_html(4, nav_state["max_reached"])
+            )
+
+New month button resets current data but preserves budget and history:
+
+    new_month_btn.click(
+        fn      = lambda: (gr.update(visible=True),
+                           gr.update(visible=False),
+                           None, None,
+                           nav_html(1, nav_state["max_reached"])),
+        outputs = [step1_group, step6_group,
+                   upload_status, preview_table, nav_bar]
+    )

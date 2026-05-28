@@ -1,0 +1,48 @@
+
+
+USER:
+Error:
+NameError: name 'app_state' is not defined
+/tmp/ipykernel_4723/392197003.py in create_finance_assistant_ui()
+    631     saved_plan   = app_state.get("budget_plan") or {}
+
+CLAUDE:
+app_state isn't defined because Cell 3 (the persistence cell) hasn't been run in this
+session. Run the cells in order from the top:
+
+    1. Cell 1  — Setup & Imports
+    2. Cell 2  — AI Configuration
+    3. Cell 3  — Data Persistence   ← this defines app_state
+    4. Cell 4  — Data Loading & Categorisation
+    5. Cell 5  — Analysis Engine
+    6. Cell 6  — RAG System
+    7. Cell 7  — Agent Tool
+    8. Cell 8  — AI Recommendations & Finn
+    9. Cell 9  — Gradio UI
+    10. Cell 10 — Launch
+
+In Colab go to Runtime → Run all to run every cell from the top in one go.
+
+EXPLANATION:
+This is one of the most common issues in Colab notebooks. Unlike a regular Python script
+that runs top to bottom automatically, in a notebook each cell only runs when you execute
+it. If you jump ahead and run Cell 10 without running Cell 3 first, any variable defined
+in Cell 3 (like app_state) won't exist yet.
+
+Cell 3 is where app_state is created:
+
+    # ── Initialise global app state ───────────────────────────────
+    app_state = load_app_data()
+    app_state["current_df"]       = None
+    app_state["current_analysis"] = None
+    app_state["current_label"]    = None
+
+Cell 9 uses app_state inside create_finance_assistant_ui():
+
+    # Pre-populate from saved state
+    saved_plan   = app_state.get("budget_plan") or {}   # ← needs Cell 3 to have run
+
+Runtime → Run all solves this by running cells in order, which is the correct workflow
+for this notebook every time it is opened in a new Colab session. Colab does not persist
+Python variables between sessions — every time you open the notebook you need to run all
+cells again.

@@ -1,0 +1,98 @@
+
+
+USER:
+I think the financial health is showing as good but:
+Total Income: $1421.99
+Essential Expenses: $1138.20
+Discretionary Spending: $989.79
+Net Position: -$706.00
+
+CLAUDE:
+You're absolutely right — a -$706 net position means the student is spending $706 more
+than they earn, which is a serious problem, not a healthy situation. The dashboard was
+showing insights based only on discretionary categories without considering the overall
+picture.
+
+Two things needed fixing:
+1. The financial overview needs a clear warning when net position is negative
+2. The health score calculation was not penalising deficit spending enough
+
+Updated health score logic in Cell 5:
+
+    # ── Step 8: Financial health score ───────────────────────
+    score = 100
+
+    # essential expenses as % of income
+    if essential_pct > 60:
+        score -= 20
+    elif essential_pct > 50:
+        score -= 10
+
+    # budget adherence — penalise deficit hard
+    if net_position < 0:
+        overspend_pct = abs(net_position) / total_income * 100
+        score -= min(30, int(overspend_pct))
+
+    # invisible spending
+    if invisible_total > 0:
+        invisible_pct = invisible_total / net_discretionary * 100
+        if invisible_pct > 15:
+            score -= 10
+        elif invisible_pct > 8:
+            score -= 5
+
+    # subscriptions
+    if subscription_total > 0:
+        sub_pct = subscription_total / net_discretionary * 100
+        if sub_pct > 20:
+            score -= 10
+        elif sub_pct > 10:
+            score -= 5
+
+    # savings rate
+    if savings_rate < 0:
+        score -= 20
+    elif savings_rate < 10:
+        score -= 10
+
+    # social overspending
+    if social_pct > 35:
+        score -= 10
+    elif social_pct > 25:
+        score -= 5
+
+    score = max(0, min(100, score))
+
+    if score >= 80:
+        health_label, health_colour = "On Track",        "green"
+    elif score >= 60:
+        health_label, health_colour = "Needs Attention", "orange"
+    elif score >= 40:
+        health_label, health_colour = "At Risk",         "red"
+    else:
+        health_label, health_colour = "Action Required", "darkred"
+
+Updated insights to prepend a critical warning when in deficit:
+
+    if net_position < 0:
+        insights.append({
+            "severity": "critical",
+            "title":    "Spending Exceeds Income",
+            "detail":   (
+                f"You spent ${abs(net_position):.2f} more than you earned. "
+                f"This is not sustainable. Essential expenses alone account for "
+                f"{essential_pct:.1f}% of your income (${total_essential:.2f}), "
+                f"leaving only ${total_income - total_essential:.2f} for everything else. "
+                f"Your discretionary spending of ${net_discretionary:.2f} exceeds that by "
+                f"${net_discretionary - (total_income - total_essential):.2f}."
+            )
+        })
+
+Dashboard overview cards show net position in red with DEFICIT label:
+
+    pos_colour = COLOURS["red"] if pos < 0 else COLOURS["green"]
+    pos_label  = "DEFICIT" if pos < 0 else "Surplus"
+
+KEY DECISION: Essential expenses like rent are shown in the category table but are
+never targeted for savings advice. The dashboard shows the full honest picture while
+ensuring the AI advice only targets what the student can actually change.

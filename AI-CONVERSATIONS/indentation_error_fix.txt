@@ -1,0 +1,80 @@
+
+USER:
+File "/tmp/ipykernel_375/718842649.py", line 61
+    small_spend_categories = ['Coffee & Snacks', 'Eating Out', 'Other']
+    ^
+IndentationError: unexpected indent
+
+CLAUDE:
+The indentation is broken around the essential flagging block. These lines were accidentally
+placed outside the function body (at module level) instead of inside it:
+
+BROKEN (de-dented outside function):
+
+    category_summary['percentage'] = (
+        category_summary['total'] / total_all_expenses * 100
+    ).round(1)
+
+# flag which categories are essential          ← at module level (wrong)
+essential_categories = (
+    all_expenses_df[all_expenses_df['essential'] == True]['category']
+    .unique()
+    .tolist()
+)
+category_summary['essential'] = category_summary.index.isin(essential_categories)
+category_summary = category_summary.sort_values('total', ascending=False)
+
+    # ── Step 4: Identify invisible spending ──────────────────
+    small_spend_categories = ['Coffee & Snacks', 'Eating Out', 'Other']  ← error here
+
+FIXED (properly indented inside function):
+
+    category_summary['percentage'] = (
+        category_summary['total'] / total_all_expenses * 100
+    ).round(1)
+
+    # flag which categories are essential       ← 4 spaces indent (inside function)
+    essential_categories = (
+        all_expenses_df[all_expenses_df['essential'] == True]['category']
+        .unique()
+        .tolist()
+    )
+    category_summary['essential'] = category_summary.index.isin(essential_categories)
+    category_summary = category_summary.sort_values('total', ascending=False)
+
+    # ── Step 4: Identify invisible spending ──────────────────
+    small_spend_categories = ['Coffee & Snacks', 'Eating Out', 'Other']  ← no error
+
+Here is the complete corrected function section:
+
+    # ── Step 3: Category breakdown (ALL expenses including essential) ──
+    all_expenses_df = df[df["amount"] < 0].copy()
+
+    category_summary = (
+        all_expenses_df
+        .groupby("category")["amount"]
+        .agg(["sum", "count", "mean"])
+        .rename(columns={"sum": "total", "count": "transactions", "mean": "average"})
+    )
+    category_summary["total"]   = category_summary["total"].abs()
+    category_summary["average"] = category_summary["average"].abs()
+
+    total_all_expenses = category_summary["total"].sum()
+    category_summary["percentage"] = (
+        category_summary["total"] / total_all_expenses * 100
+    ).round(1)
+
+    # flag which categories are essential
+    essential_categories = (
+        all_expenses_df[all_expenses_df["essential"] == True]["category"]
+        .unique().tolist()
+    )
+    category_summary["essential"] = category_summary.index.isin(essential_categories)
+    category_summary = category_summary.sort_values("total", ascending=False)
+
+    # ── Step 4: Invisible spending ────────────────────────────
+    invisible_categories = ["Coffee & Snacks", "Eating Out", "Other"]
+
+KEY LESSON: IndentationErrors in Python often cascade — when one block is at the wrong
+indent level, everything after it appears wrong too. Always look at the lines BEFORE the
+error indicator, not just the line it points to.

@@ -1,0 +1,110 @@
+
+
+USER:
+Is this cell still needed?
+
+    # Flag Essential Spending
+    def flag_essential_transactions(df):
+        essential_keywords = [
+            'rent', 'synergy', 'alinta', 'insurance', 'realmark',
+            'ray white', 'lj hooker', 'optus', 'telstra', 'medicare',
+            'electricity', 'water', 'internet', 'gas'
+        ]
+        for keyword in essential_keywords:
+            mask = df['description'].str.lower().str.contains(keyword, na=False)
+            df.loc[mask, 'essential'] = True
+        flagged = df['essential'].sum()
+        print(f"✅ {flagged} transactions automatically flagged as essential.")
+        return df
+
+CLAUDE:
+No, delete it. Cell 4 already contains a newer, better version of flag_essential_transactions
+with a more complete keyword list and cleaner output. This old version would actually
+overwrite the Cell 4 version if run after it, causing bugs.
+
+---
+
+USER:
+Is this cell still needed?
+
+    class RAG:
+        def ask(self, question):
+            return finance_rag_ask(question)
+    rag_system = RAG()
+
+CLAUDE:
+No, delete it. Cell 6 already defines the FinanceRAG class and creates rag_system
+internally. This is a duplicate from an older version.
+
+---
+
+USER:
+Is this cell still needed?
+
+    test_response = get_response("In one sentence, what is the most important money habit
+    for a university student?")
+    print("✅ get_response is working!")
+
+CLAUDE:
+No, delete it. Cell 2 already tests the connection. This is redundant.
+
+---
+
+USER:
+Is this cell still needed?
+
+    def run_finance_chat(analysis_data=None):
+        system_prompt, history = create_finance_chat_personality(analysis_data)
+        while True:
+            user_input = input("You: ").strip()
+            if user_input.lower() in ['quit', 'exit', 'bye']:
+                break
+            ...
+
+CLAUDE:
+Yes, delete it. This is the old command-line chat loop from before the Gradio UI was
+built. Cell 8 and Cell 9 handle everything this did through the Gradio interface.
+
+---
+
+USER:
+Is this cell still needed?
+
+    from hands_on_ai.chat import get_response
+
+    def create_finance_chat_personality(analysis_data=None):
+        """Sets up a finance-focused chat personality..."""
+        ...
+        print("=" * 55)
+        print("        💬 FINN — YOUR FINANCE COACH")
+        print("=" * 55)
+        return system_prompt, conversation_history
+
+CLAUDE:
+Yes, delete it. This is the old version of Finn's personality setup. Cell 8 contains
+build_finn_system_prompt and chat_with_finn which are the updated replacements with
+the correct no-nonsense tone and proper Gradio integration.
+
+---
+
+SUMMARY OF CLEANUP:
+Deleted cells were all remnants of earlier development stages superseded by the rebuild.
+
+Reasons for deletion:
+- Duplicate function definitions — later cells would overwrite earlier ones silently
+- Old command-line code replaced by Gradio UI
+- Redundant connection tests
+- Old personality code replaced by updated no-nonsense Finn
+
+Final clean cell order:
+    Cell 1  — Setup & Imports
+    Cell 2  — AI Configuration
+    Cell 3  — Data Persistence
+    Cell 4  — Data Loading & Categorisation
+    Cell 5  — Spending Analysis Engine
+    Cell 6  — RAG System
+    Cell 7  — Agent Tool
+    Cell 8  — AI Recommendations & Finn
+    Cell 9  — Gradio UI
+    Cell 10 — Launch
+    [Test cells preserved for testing section]

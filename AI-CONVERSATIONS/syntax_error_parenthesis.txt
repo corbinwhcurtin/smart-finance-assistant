@@ -1,0 +1,76 @@
+
+
+USER:
+File "/tmp/ipykernel_4723/801345218.py", line 1093
+    csv_file.change(
+                   ^
+SyntaxError: '(' was never closed
+
+CLAUDE:
+The issue is that the handle_goto_step2 function and next_to_step2.click were pasted
+outside the create_finance_assistant_ui function, and csv_file.change() was missing
+its closing parenthesis.
+
+BROKEN structure:
+
+    def create_finance_assistant_ui():
+        ...
+        # EVENT WIRING
+        csv_file.change(
+            fn      = handle_upload,
+            inputs  = [csv_file],
+            outputs = [step1_group, step2_group,
+                       upload_status, preview_table, nav_bar]
+            # ← MISSING closing parenthesis )
+
+def handle_goto_step2():        # ← accidentally at module level
+    nav_state["max_reached"] = max(nav_state["max_reached"], 2)
+    df = app_state["current_df"]
+    ...
+
+next_to_step2.click(            # ← also at module level
+    fn      = handle_goto_step2,
+    ...
+)
+
+FIXED structure — everything inside the function with proper closing parentheses:
+
+    def create_finance_assistant_ui():
+
+        def handle_goto_step2():    # ← inside the function (4 spaces indent)
+            nav_state["max_reached"] = max(nav_state["max_reached"], 2)
+            df = app_state["current_df"]
+            if df is not None:
+                display_df = df[["date","description","amount",
+                                  "category","essential"]].copy()
+                display_df["date"] = display_df["date"].dt.strftime("%d/%m/%Y")
+            else:
+                display_df = None
+            return (
+                gr.update(visible=False),
+                gr.update(visible=True),
+                display_df,
+                nav_html(2, nav_state["max_reached"])
+            )
+
+        # EVENT WIRING
+        csv_file.change(
+            fn      = handle_upload,
+            inputs  = [csv_file],
+            outputs = [step1_group, step2_group,
+                       upload_status, preview_table, nav_bar]
+        )                           # ← closing parenthesis present
+
+        next_to_step2.click(        # ← inside function (8 spaces indent)
+            fn      = handle_goto_step2,
+            inputs  = [],
+            outputs = [step1_group, step2_group, edit_table, nav_bar]
+        )
+
+    return app                      # ← function ends here
+
+KEY LESSON: When adding code snippets to an existing function, always check the
+indentation level carefully. Python uses indentation to define scope — code at the
+wrong indent level is interpreted as being in a completely different scope, which
+causes cascading syntax errors throughout the entire file. The full Cell 9 needed
+to be rewritten cleanly to fix this properly.

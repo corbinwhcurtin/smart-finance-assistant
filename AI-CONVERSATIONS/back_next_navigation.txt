@@ -1,0 +1,70 @@
+
+
+USER:
+I think back and next buttons will be beneficial.
+
+CLAUDE:
+Good idea. Here is the updated button pattern — each step gets both a back and next button
+placed in a row using gr.Row():
+
+Step 1 — No back button needed (it is the start):
+    next_to_step2 = gr.Button("Continue to Review & Edit →", variant="primary")
+
+Step 2 — Back to Import, Next runs analysis:
+    with gr.Row():
+        back_to_step1 = gr.Button("← Back to Import",  variant="secondary")
+        next_to_step3 = gr.Button("Run Analysis →",     variant="primary")
+
+Step 3 — Back to Edit, Next goes to Plan or Budget depending on returning user:
+    with gr.Row():
+        back_to_step2   = gr.Button("← Back to Edit",   variant="secondary")
+        next_from_step3 = gr.Button("Plan My Budget →",  variant="primary")
+
+Step 4 — Back to Insights, Next to Budget:
+    with gr.Row():
+        back_to_step3 = gr.Button("← Back to Insights", variant="secondary")
+        next_to_step5 = gr.Button("View My Budget →",    variant="primary")
+
+Step 5 — Back to Plan, Next to Chat:
+    with gr.Row():
+        back_to_step4 = gr.Button("← Back to Plan",     variant="secondary")
+        next_to_step6 = gr.Button("Chat with Finn →",    variant="primary")
+
+Step 6 — Back to Budget, Upload Next Month:
+    with gr.Row():
+        back_to_step5 = gr.Button("← Back to Budget",          variant="secondary")
+        new_month_btn = gr.Button("Upload Next Month's Data →", variant="primary")
+
+Each back button event wiring swaps visibility between two step groups and updates the nav bar:
+
+    back_to_step2.click(
+        fn      = lambda: (gr.update(visible=False),
+                           gr.update(visible=True),
+                           nav_html(2, nav_state["max_reached"])),
+        outputs = [step3_group, step2_group, nav_bar]
+    )
+
+    back_to_step3.click(
+        fn      = lambda: (gr.update(visible=False),
+                           gr.update(visible=True),
+                           nav_html(3, nav_state["max_reached"])),
+        outputs = [step4_group, step3_group, nav_bar]
+    )
+
+    back_to_step4.click(
+        fn      = lambda: (gr.update(visible=False),
+                           gr.update(visible=True),
+                           nav_html(4, nav_state["max_reached"])),
+        outputs = [step5_group, step4_group, nav_bar]
+    )
+
+    back_to_step5.click(
+        fn      = lambda: (gr.update(visible=False),
+                           gr.update(visible=True),
+                           nav_html(5, nav_state["max_reached"])),
+        outputs = [step6_group, step5_group, nav_bar]
+    )
+
+Design principle: Primary buttons (blue) move forward in the flow. Secondary buttons
+(grey/outline) go backward. This visual hierarchy makes the expected direction of travel
+obvious without needing labels.

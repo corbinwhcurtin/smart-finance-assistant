@@ -1,0 +1,121 @@
+
+
+USER:
+Should 100% be saved, and show trends over time. Auto-save to JSON file.
+
+CLAUDE:
+Here is the complete save/load system built as Cell 3:
+
+    # ── Cell 3: Data Persistence (Save / Load) ────────────────────
+
+    SAVE_FILE = "finance_data.json"
+
+    def save_app_data(app_state: dict) -> None:
+        """
+        Serialises and saves the full app state to a JSON file.
+        Called automatically whenever data changes.
+        """
+        try:
+            serialisable = {
+                "budget_plan":      app_state.get("budget_plan"),
+                "safety_net":       app_state.get("safety_net"),
+                "savings_goals":    app_state.get("savings_goals", []),
+                "monthly_snapshots": []
+            }
+
+            # serialise each monthly snapshot
+            for snapshot in app_state.get("monthly_snapshots", []):
+                s = snapshot.copy()
+                # convert category_summary DataFrame to dict
+                if isinstance(s.get("category_summary"), pd.DataFrame):
+                    s["category_summary"] = s["category_summary"].to_dict()
+                serialisable["monthly_snapshots"].append(s)
+
+            with open(SAVE_FILE, "w") as f:
+                json.dump(serialisable, f, indent=2, default=str)
+
+        except Exception as e:
+            print(f"Auto-save failed: {e}")
+
+
+    def load_app_data() -> dict:
+        """
+        Loads saved app state from JSON file if it exists.
+        Returns empty state if no save file found.
+        """
+        empty_state = {
+            "budget_plan":       None,
+            "safety_net":        None,
+            "savings_goals":     [],
+            "monthly_snapshots": []
+        }
+
+        if not Path(SAVE_FILE).exists():
+            print("No save file found. Starting fresh.")
+            return empty_state
+
+        try:
+            with open(SAVE_FILE, "r") as f:
+                data = json.load(f)
+
+            # restore category_summary DataFrames
+            for snapshot in data.get("monthly_snapshots", []):
+                if isinstance(snapshot.get("category_summary"), dict):
+                    snapshot["category_summary"] = pd.DataFrame.from_dict(
+                        snapshot["category_summary"]
+                    )
+
+            print(f"Save file loaded. {len(data.get('monthly_snapshots', []))} monthly snapshot(s) found.")
+            return data
+
+        except Exception as e:
+            print(f"Could not load save file: {e}")
+            return empty_state
+
+
+    def get_snapshot_label(df: pd.DataFrame) -> str:
+        """
+        Generates a month/year label from a transaction DataFrame.
+        e.g. 'March 2025'
+        """
+        if df is None or df.empty:
+            return "Unknown"
+        earliest = df['date'].min()
+        latest   = df['date'].max()
+        if earliest.month == latest.month:
+            return earliest.strftime("%B %Y")
+        return f"{earliest.strftime('%b')} - {latest.strftime('%b %Y')}"
+
+
+    # ── Initialise global app state ───────────────────────────────
+    app_state = load_app_data()
+    app_state["current_df"]       = None   # active transaction DataFrame
+    app_state["current_analysis"] = None   # active analysis dictionary
+    app_state["current_label"]    = None   # e.g. "March 2025"
+
+    print(f"App state initialised.")
+    print(f"  Budget plan:   {'Set' if app_state['budget_plan'] else 'Not set'}")
+    print(f"  Safety net:    {'Set' if app_state['safety_net'] else 'Not set'}")
+    print(f"  Savings goals: {len(app_state['savings_goals'])}")
+    print(f"  Past months:   {len(app_state['monthly_snapshots'])}")
+
+USER:
+Where should I put this cell for the easiest to follow document flow?
+
+CLAUDE:
+Put it right after Cell 2 (AI configuration) and before the data processing functions.
+
+    Cell 1  — Setup & Imports
+    Cell 2  — AI Configuration
+    Cell 3  — Data Persistence  ← here
+    Cell 4  — Data Loading & Categorisation
+    ...
+
+The logic is that persistence needs to exist before any data functions run, since those
+functions will write to app_state. Think of it as laying the foundation before building
+the walls — everything from Cell 4 onward depends on app_state being available.
+
+NOTE: current_df and current_analysis are NOT saved to JSON — they are recomputed each
+session from the uploaded CSV. Only the budget plan and historical snapshots persist.
+This is intentional — CSV files can be large and saving raw transaction data to JSON
+would be slow and wasteful.

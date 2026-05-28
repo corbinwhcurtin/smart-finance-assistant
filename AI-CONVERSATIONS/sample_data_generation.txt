@@ -1,0 +1,98 @@
+
+
+USER:
+Please create 3 months worth of realistic uni student transaction data CSV. Include more going
+out and drinking, keep rent and utilities and phone bill around 50% of income. Student will
+be working approximately 28 hours per week so create realistic income from that, no centrelink.
+Student will only have around $40 remaining each week.
+
+CLAUDE:
+Working out the parameters first:
+
+- 28 hrs/week at ~$24.50/hr casual = ~$580/week net
+- 13 weeks (3 months) = $7,540 total income
+- Essential costs: Rent $1,050 + Power $95 + Phone $55 = $1,200/month = $3,600 over 3 months
+- Essential as % of income: $3,600 / $7,540 = 47.7%
+- Target weekly leftover: $40
+- Total expenses budget: $7,540 - ($40 x 13) = $6,020
+
+Generated transactions_3months.csv with 134 transactions across January-March 2025.
+
+Sample of generated transactions:
+
+    Date,Description,Amount,Category
+    03/01/2025,Casual Work - Hungry Jacks,+580.00,Income
+    03/01/2025,Rent - Realmark Property,-1050.00,Bills & Utilities
+    05/01/2025,Coles Supermarket Karrinyup,-65.30,Food & Groceries
+    06/01/2025,Boost Juice Hay St,-8.50,Coffee & Snacks
+    07/01/2025,Transperth Smartrider Topup,-20.00,Transport
+    09/01/2025,The Grosvenor Hotel,-38.50,Social
+    09/01/2025,Uber - Northbridge to Home,-19.40,Transport
+    10/01/2025,Casual Work - Hungry Jacks,+580.00,Income
+    10/01/2025,Spotify Premium,-11.99,Subscriptions
+    13/01/2025,Optus Phone Bill,-55.00,Bills & Utilities
+    15/01/2025,The Rechabite Northbridge,-52.00,Social
+    16/01/2025,Synergy Power Bill,-95.00,Bills & Utilities
+    18/01/2025,Netflix Monthly,-17.99,Subscriptions
+
+Final verification:
+    Total Income:       $7,540.00
+    Essential:          $3,600.00 (47.7% of income)
+    Total Expenses:     $6,971.96
+    Net Position:       $568.04
+    Weekly leftover:    $43.70
+
+Spending breakdown:
+    Bills & Utilities:  $3,600.00
+    Social:             $1,091.00 (nights out — Grosvenor, Rechabite, Lucky Chan's, Amplifier)
+    Food & Groceries:   $761.50
+    Eating Out:         $465.40 (Uber Eats, fast food)
+    Transport:          $457.00 (Transperth + Ubers home from nights out)
+    Shopping:           $301.95
+    Subscriptions:      $131.91 (Spotify, Netflix, Disney+)
+    Coffee & Snacks:    $131.80
+
+---
+
+USER:
+Take this sample data and create the next 3 months please, make it that they saved some
+extra money.
+
+CLAUDE:
+Improvements made for April-June 2025:
+
+- Cancelled Disney+ saving $13.99/month
+- Social spending reduced — fewer expensive nights, same frequency but cheaper venues
+- Less Uber Eats, more cooking at home
+- Less impulse shopping
+- Groceries slightly up (expected when eating out less)
+
+Generated transactions_months4to6.csv with improvements.
+
+Sample of improvements visible in data:
+
+    # April - cheaper social nights
+    12/04/2025,The Rechabite Northbridge,-42.00,Social   (was $52-67)
+    25/04/2025,The Grosvenor Hotel,-38.00,Social          (was $54-67)
+
+    # No Disney+ subscription
+    # (Disney+ entries present in Jan-Mar, absent in Apr-Jun)
+
+    # Less Uber Eats
+    07/04/2025,McDonald's Northbridge,-11.20,Eating Out
+    15/04/2025,Uber Eats - Domino's,-19.90,Eating Out     (less frequent)
+
+Final verification:
+    Total Income:       $8,120.00
+    Essential:          $3,600.00 (44.3% of income)
+    Total Expenses:     $6,317.47
+    Net Position:       $1,802.53
+    Weekly leftover:    $138.66 (up from $43.70 — improvement of +$94.96/week)
+
+Category changes Jan-Mar vs Apr-Jun:
+    Social:        $1,091 → $600  (down $491)
+    Eating Out:    $465   → $402  (down $63)
+    Shopping:      $302   → $239  (down $63)
+    Subscriptions: $132   → $90   (down $42, Disney+ cancelled)
+    Coffee:        $132   → $110  (down $22)
+    Groceries:     $762   → $812  (up $50 — cooking more at home)

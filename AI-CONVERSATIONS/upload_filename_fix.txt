@@ -1,0 +1,44 @@
+
+
+USER:
+Code in cell:
+    from google.colab import files
+    uploaded = files.upload()
+    clean_data = load_and_clean_transaction_data("sample_transactions.csv")
+    print(clean_data)
+
+Error: File not found. Please check the file path and try again.
+
+How can I make this print cleaned data from the document uploaded, if the name is not
+sample_transactions? I don't want to change the name each time.
+
+CLAUDE:
+Replace it with this — it automatically picks up whatever filename was uploaded:
+
+    from google.colab import files
+
+    uploaded = files.upload()
+
+    # automatically get the filename regardless of what it's called
+    filename = list(uploaded.keys())[0]
+    print(f"Uploaded: {filename}")
+
+    clean_data = load_and_clean_transaction_data(filename)
+    print(clean_data)
+
+EXPLANATION:
+When you use files.upload() in Colab, it returns a dictionary like:
+    {"my_bank_export_march.csv": b"...file contents..."}
+
+The key is always the original filename. By using list(uploaded.keys())[0] we get that
+filename dynamically instead of hardcoding it.
+
+For example:
+    uploaded = {"transactions_3months.csv": b"..."}
+    filename = list(uploaded.keys())[0]
+    # filename is now "transactions_3months.csv"
+    # works for any name the user uploads
+
+This means students can upload their real bank exports with whatever filename their bank
+generates (e.g. "Statement_01Jan2025_31Mar2025.csv") without having to rename the file
+first.

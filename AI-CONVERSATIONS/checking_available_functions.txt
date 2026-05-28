@@ -1,0 +1,102 @@
+
+USER:
+Error for cell:
+ImportError: cannot import name 'chat_with_history' from 'hands_on_ai.chat'
+
+CLAUDE:
+The chat_with_history function doesn't exist in this version of hands_on_ai.
+Let's find out what is actually available:
+
+    import hands_on_ai.chat as hai_chat
+    print(dir(hai_chat))
+
+USER:
+Output:
+['__all__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__',
+'__package__', '__path__', '__spec__', 'alien_bot', 'caveman_bot', 'coach_bot', 'coder_bot',
+'data', 'emoji_bot', 'friendly_bot', 'get_response', 'grumpy_professor_bot', 'hacker_bot',
+'personalities', 'pirate_bot', 'sarcastic_bot', 'shakespeare_bot', 'teacher_bot', 'therapist_bot']
+
+CLAUDE:
+There's no chat_with_history but there is get_response. The fix is to manually build
+conversation history as a string and pass it to get_response each time:
+
+    def chat_with_finn(message: str, history: list,
+                       analysis: dict = None,
+                       budget_plan: dict = None) -> str:
+
+        system_prompt = build_finn_system_prompt(analysis, budget_plan)
+
+        # build conversation history string
+        history_text = ""
+        for exchange in history[-6:]:
+            if isinstance(exchange, dict):
+                role = "Student" if exchange["role"] == "user" else "Finn"
+                history_text += f"{role}: {exchange['content']}\n"
+            elif isinstance(exchange, (list, tuple)) and len(exchange) == 2:
+                history_text += f"Student: {exchange[0]}\nFinn: {exchange[1]}\n"
+
+        full_prompt = (
+            f"{system_prompt}\n\n"
+            f"Conversation so far:\n{history_text}\n"
+            f"Student: {message}\n"
+            f"Finn:"
+        )
+
+        try:
+            return get_response(full_prompt)
+        except Exception as e:
+            return f"Could not reach AI: {e}"
+
+---
+
+USER:
+Check what is available in hands_on_ai.agent
+
+    from hands_on_ai import agent
+    print(dir(agent))
+
+Output:
+['__all__', ..., 'calculator', 'converter', 'core', 'dictionary', 'formats', 'list_tools',
+'prompts', 'register_calculator_tool', 'register_search_tool', 'register_tool',
+'register_weather_tool', 'run_agent', 'tools']
+
+Also checked function signatures:
+
+    import inspect
+    print(inspect.signature(agent.register_tool))
+    print(inspect.signature(agent.run_agent))
+
+Output:
+    (name: str, description: str, function: Callable)
+    (prompt: str, model: Optional[str] = None, format: str = 'auto',
+     max_iterations: int = 5, verbose: bool = False) -> str
+
+CLAUDE:
+Now we have everything we need. register_tool takes a name, description, and function.
+run_agent takes a prompt and runs it autonomously.
+
+Also checked hands_on_ai.rag:
+
+    from hands_on_ai import rag
+    print(dir(rag))
+
+Output:
+['__all__', ..., 'chunk_text', 'copy_sample_docs', 'get_embeddings', 'get_sample_docs_path',
+'get_top_k', 'list_sample_docs', 'load_index_with_sources', 'load_text_file',
+'save_index_with_sources', 'utils']
+
+    print(inspect.signature(rag.chunk_text))
+    print(inspect.signature(rag.get_embeddings))
+    print(inspect.signature(rag.get_top_k))
+    print(inspect.signature(rag.load_text_file))
+
+Output:
+    (text, chunk_size=None)
+    (chunks, model=None)
+    (query, index_path, k=3, return_scores=False)
+    (path: pathlib.Path) -> str
+
+KEY LESSON: Always check what functions are actually available in a library before assuming
+they exist. The dir() and inspect.signature() approach is the reliable way to discover what
+a library actually supports versus what documentation or training data suggests.
