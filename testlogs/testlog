@@ -1,0 +1,46 @@
+Test Logs:
+
+Test 1: Normal Data:
+
+Data Set Used:
+test1 and test2
+
+Program worked as expected and provide good feedback on spending
+
+
+Test 2: Edge Cases:
+
+Data Set Used:
+test3 and test4
+100% of income used, 1c transactions 
+Program worked as intended, gave poor health score whitch is accurate
+
+
+Test 3: Potentially Error Causing Data
+
+Dataset used:
+test5 and test6
+Missing $, costs in (), abbreviated transactions descriptions e.g. HJs instead of Hungry Jacks. 
+
+Program handled data well, everything worked as expected
+
+
+Test 4: 
+
+Dataset Used:
+test7 and test8
+
+Missing dates, costs
+Program worked as intended and excluded the problem data
+
+
+Test 5:
+
+Dataset Used
+test9 and test10
+Corrupt Data, e.g. 33/11/26
+
+Program dropped broken data as expected
+
+
+
